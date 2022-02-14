@@ -26,48 +26,58 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
+# Hướng dẫn cài đặt
 
-```bash
-$ npm install
+## Chuẩn bị:
+
+- Docker & Docker-compose
+- Git
+- node v16 trở lên
+
+### Bước 1: Clone project
+
+### Bước 2: Copy file `.env.local` thành 1 file mới tên là `.env`
+
+### Bước 3: Chạy câu lênh `docker-compose up`
+
+### Bước 4: Mở trình duyệt, vào http://localhost:3000/ để kiểm tra xem server đã hoạt động chưa
+
+# Kết nối Database:
+
+Sử dụng mysql workbench hoặc dbeaver (recommend) để kết nối đến DB.
+
+Thông tin kết nối:
+
+- Host: localhost
+- Port: 3306
+- Database: nestjs
+- Username: ml-intern
+- Password: password
+
+# Cài đặt node packages:
+
+Khi cài đặt như trên thì trong folder của project chưa có `node_modules` nên khi mở source sẽ thấy lỗi thiếu package, dùng câu lệnh:
+
+```
+npm install
 ```
 
-## Running the app
+Để cài đặt
 
-```bash
-# development
-$ npm run start
+# Sử dụng typeorm CLI:
 
-# watch mode
-$ npm run start:dev
+Mọi câu lệnh sẽ phải thực hiện trong container của docker, chứ không được thực hiện trực tiếp, để vào trong container, dùng câu lệnh:
 
-# production mode
-$ npm run start:prod
+```
+docker-compose exec web sh
 ```
 
-## Test
+Khi muốn gọi command của typeorm dung câu lênh:
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+```
+npm run typeorm -- <câu lệnh cần thực hiện>
 ```
 
-## Support
+Ví dụ như: `npm run typeorm -- migration:run`
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+> Trong một số trường hợp thì sẽ không cần `--` nhưng thôi cứ cho vào cho chắc
