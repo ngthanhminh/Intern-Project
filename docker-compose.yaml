@@ -6,6 +6,7 @@ services:
       - 3000:3000
     volumes:
       - ./:/app/nestjs
+      - /app/nestjs/node_modules
     depends_on:
       - db
 
