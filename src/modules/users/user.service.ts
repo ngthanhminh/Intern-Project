@@ -7,11 +7,7 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async getUserById(userId: number): Promise<User> {
-    const user = await this.userRepository.findOne({
-      where: {
-        id: userId,
-      },
-    });
+    const user = await this.userRepository.findOne(userId);
     if (!user) {
       throw new NotFoundException();
     }
