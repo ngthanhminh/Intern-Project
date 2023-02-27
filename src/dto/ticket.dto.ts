@@ -3,7 +3,10 @@ import { MemberDto } from './member.dto';
 import { Exclude } from 'class-transformer';
 import { 
      IsDate, 
+     IsDateString, 
      IsNotEmpty, 
+     IsNumber, 
+     IsNumberString, 
      IsOptional, 
      IsString, 
      MaxLength, 
@@ -15,33 +18,44 @@ export class TicketDto {
   id ?: number;
 
   @IsNotEmpty() 
+  @IsOptional()
   code: number;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(120)
+  @IsOptional()
   title: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty() 
   @MaxLength(5000)
+  @IsOptional()
   content: string;
 
-  @IsDate()
-  @IsNotEmpty()
+  @IsDateString()
+  @IsOptional()
   deadline: Date;  
 
-  @IsDate()
+  @IsDateString()
+  @IsOptional()
   createdAt: Date;
 
-  @IsDate()
+  @IsDateString()
+  @IsOptional()
   updatedAt: Date;
 
-  @IsDate()
+  @IsDateString()
+  @IsOptional()
   deletedAt: Date;
 
-  project: ProjectDto;
+  @IsNumberString()
+  @IsNotEmpty()
+  @IsOptional()
+  // @Exclude()
+  project_id: number;
 
-  assign: MemberDto;
-
+  @IsNumberString()
+  @IsOptional()
+  assign: number;
 }

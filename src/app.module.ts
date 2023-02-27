@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Member } from './entities/member.entity';
 import { Project } from './entities/project.entity';
+import { Project_Member } from './entities/project_member.entity';
 import { Ticket } from './entities/ticket.entity';
 import { User } from './entities/user.entity';
 import { MemberModule } from './modules/member/member.module';
@@ -22,7 +23,7 @@ import { UserModule } from './modules/users/user.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Member, Ticket, Project, ],
+      entities: [User, Member, Ticket, Project, Project_Member],
     }),
     UserModule,
     MemberModule,

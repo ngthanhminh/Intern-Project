@@ -35,9 +35,9 @@ export class ProjectService {
           
 
      // create project 
-     async createProject(project: Partial<Project>): Promise<Project>{
+     async createProject(project: Project): Promise<Project>{
           try {
-               return await this.projectsRepository.save(ProjectDto.toEntity(project));
+               return await this.projectsRepository.save(project);
           }
           catch(error){
                console.log(error);
@@ -46,10 +46,9 @@ export class ProjectService {
      }
 
      // update project 
-     async updateProject(id: number, project: Partial<Project>): Promise<Project>{
-          console.log('hhi')
+     async updateProject(id: number, project: ProjectDto): Promise<Project>{
           try {
-               await this.projectsRepository.update(id, ProjectDto.toEntity(project));
+               await this.projectsRepository.update(id, project);
                return await this.projectsRepository.findOne({id: id});
           }
           catch(error) {
@@ -57,6 +56,5 @@ export class ProjectService {
                throw new HttpException('BadRequest', HttpStatus.BAD_REQUEST);
           }
      }
-
-
+     
 }

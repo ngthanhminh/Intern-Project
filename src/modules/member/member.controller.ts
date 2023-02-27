@@ -33,14 +33,14 @@ export class MemberController {
 
      @Post()
      async create(
-          @Body() member: MemberDto,
-     ): Promise<Partial<MemberDto>> {
+          @Body() member: Member,
+     ): Promise<Partial<Member>> {
           return this.memberService.createMember(member);
      }
 
      @Patch(':id') 
      async update(
-          @Body() member: Partial<MemberDto>,
+          @Body() member: MemberDto,
           @Param('id', ParseIntPipe) id : number
      ): Promise<Partial<MemberDto>> {
           return this.memberService.updateMember(id, member);

@@ -1,3 +1,4 @@
+import { isNotEmpty, IsNotEmpty, IsOptional } from 'class-validator';
 import { ProjectType } from '../dto/projectType.enum';
 import {
   Entity,
@@ -18,6 +19,7 @@ export class Project {
   @PrimaryGeneratedColumn()
   id ?: number;
 
+  @IsNotEmpty()
   @Column({
     type: 'nvarchar',
     length: 255,
@@ -26,11 +28,15 @@ export class Project {
   })
   name: string;
 
+  @IsNotEmpty()
+  @IsOptional()
   @CreateDateColumn({
     name: 'start_date',
   })
   start_date: Date;  
 
+  @IsNotEmpty()
+  @IsOptional()
   @Column({
     name: 'end_date',
   })

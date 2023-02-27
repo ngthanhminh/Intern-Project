@@ -1,3 +1,4 @@
+import { ProjectDto } from 'src/dto/project.dto';
 import { ProjectType } from '../../dto/projectType.enum';
 import { 
      Controller,
@@ -26,13 +27,13 @@ export class ProjectController {
           @Query('type') type ?: string,
           @Query('startDate') startDate ?: string,
           @Query('endDate') endDate ?: string,
-     ): Promise<Project | Project[]> {
+     ): Promise<Project[]> {
           return await this.projectService.getProject(name, type, startDate, endDate);
      }
 
      @Post()
      async createProject(
-          @Body() project: Partial<Project>,
+          @Body() project: Project,
      ): Promise<Project> {
           return await this.projectService.createProject(project) ; 
      }
@@ -40,7 +41,7 @@ export class ProjectController {
      @Patch(':id')
      async updateProject(
           @Param('id', ParseIntPipe) id: number,
-          @Body() project: Partial<Project>,
+          @Body() project: ProjectDto,
      ): Promise<Project> {
           return await this.projectService.updateProject(id, project);
      }

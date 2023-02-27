@@ -16,7 +16,7 @@ export class MemberService {
      ) {} 
 
      // get list members, find member with name & username 
-     async getListMembers(username ?: string, name ?: string): Promise<Partial<MemberDto>[]> {
+     async getListMembers(username ?: string, name ?: string): Promise<Partial<Member>[]> {
           try {
                if(name !== undefined || username !== undefined) 
                     return await this.membersRepository.find({
@@ -39,9 +39,10 @@ export class MemberService {
      }
 
      //  create member
-     async createMember(memberData: Partial<MemberDto>): Promise<Partial<MemberDto>> {
+     async createMember(memberData: Member): Promise<Partial<Member>> {
           try {
-               const newMember = await this.membersRepository.save(await MemberDto.createEntity(memberData));
+               memberData.password = await MemberDto.encryptPassword(memberData.password);
+               const newMember = await this.membersRepository.save(memberData);
                newMember.password = undefined;
                return newMember;
           }
@@ -52,9 +53,10 @@ export class MemberService {
      }
 
      // update member 
-     async updateMember(id : number, member: Partial<MemberDto>): Promise<Partial<MemberDto>> {
+     async updateMember(id : number, member: MemberDto): Promise<Partial<Member>> {
           try {
-               await this.membersRepository.update(id, await MemberDto.updateEntity(member));
+               member.password = await MemberDto.encryptPassword(member.password);
+               await this.membersRepository.update(id, member);
                const member2 = await this.membersRepository.findOne({id: id});
                member2.password = undefined;
                return member2;
