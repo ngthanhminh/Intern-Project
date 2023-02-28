@@ -19,7 +19,7 @@ export class MemberService {
           @InjectRepository(Ticket)
           private ticketsRepository: Repository<Ticket>,
           @InjectRepository(ProjectMember)
-          private project_membersRepository: Repository<ProjectMember>,
+          private projectMembersRepository: Repository<ProjectMember>,
      ) {} 
 
      // get list members, find member with name & username 
@@ -28,7 +28,7 @@ export class MemberService {
                if(name !== undefined || username !== undefined) 
                     return await this.membersRepository.find({
                          select: 
-                              ['id', 'name', 'username', 'avatar', 'createdAt', 'updatedAt', 'deletedAt'],
+                              ['id', 'name', 'username', 'avatar', 'created_at', 'updated_at', 'deleted_at'],
                          where: [
                               {name: name},
                               {username: username},
@@ -36,7 +36,7 @@ export class MemberService {
                     })
                return await this.membersRepository.find({
                     select:
-                         ['id', 'name', 'username', 'avatar', 'createdAt', 'updatedAt', 'deletedAt']
+                         ['id', 'name', 'username', 'avatar', 'created_at', 'updated_at', 'deleted_at']
                });             
           }
           catch(error) {
@@ -63,8 +63,6 @@ export class MemberService {
      async updateMember(id : number, memberData: Partial<MemberDto>): Promise<Partial<Member>> {
           try {
                const member = await this.membersRepository.findOne({id: id});
-               console.log(member.password);
-               
                if(member && !await MemberDto.comparePassword(memberData.password, member.password)) {
                     memberData.password = await MemberDto.encryptPassword(memberData.password);
                     await this.membersRepository.update(id, memberData);
@@ -81,20 +79,25 @@ export class MemberService {
      }
      
      // assign ticket for a member 
-     async assignTicketForMember(memberId: number, ticketIds: number[]): Promise<Member | any> {
-          const member = await this.project_membersRepository.findOne({member_id: memberId});
+     async assignTicketForMember(memberId: number, ticketIds: number[]): Promise<ProjectMember[]> {
+          const member = await this.projectMembersRepository.findOne({member_id: memberId});
           if(member){
-               const tickets: Ticket[] = await this.ticketsRepository
-               .createQueryBuilder('ticket')
-               .where('ticket.id IN (:...ids)', {ids: ticketIds})
+               const projectsMembers = await this.projectMembersRepository
+               .createQueryBuilder('ProjectMember')
+               .where('ProjectMember.member_id = :id', {id: memberId})
                .getMany()  
                
-               for(let ticket of tickets) {
-                    ticket.project_member_id = member.id;
+               for(let projectMember of projectsMembers) {
+                    await this.ticketsRepository
+                    .createQueryBuilder()
+                    .update('tickets')
+                    .set({project_member_id: projectMember.id})
+                    .where('tickets.project_id = :id', {id: projectMember.project_id})
+                    .andWhere('tickets.id IN (:...ids)', {ids: ticketIds})
+                    .execute()
                }
 
-               await this.ticketsRepository.save(tickets);
-               return await this.project_membersRepository.find({
+               return await this.projectMembersRepository.find({
                     relations: ['tickets'],
                     where: {member_id: memberId},
                })

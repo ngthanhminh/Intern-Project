@@ -39,13 +39,4 @@ export class ProjectDto {
   @IsOptional()
   expected_profit: bigint;
 
-  @IsDateString()
-  created_at: Date;
-
-  @IsDateString()
-  updated_at: Date;
-
-  @IsDateString()
-  deleted_at: Date;
-
 }

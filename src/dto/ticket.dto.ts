@@ -35,16 +35,7 @@ export class TicketDto {
 
   @IsDateString()
   @IsOptional()
-  deadline: Date;  
-
-  @IsDateString()
-  created_at: Date;
-
-  @IsDateString()
-  updated_at: Date;
-
-  @IsDateString()
-  deleted_at: Date;
+  deadline: Date; 
 
   @IsNumberString()
   @IsNotEmpty()

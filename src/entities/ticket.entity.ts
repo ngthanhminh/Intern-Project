@@ -19,7 +19,7 @@ import { ProjectMember } from './projectMember.entity';
 })
 export class Ticket {
   @PrimaryGeneratedColumn()
-  id ?: number;
+  id?: number;
 
   @IsNotEmpty()
   @Column({

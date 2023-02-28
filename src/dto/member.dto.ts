@@ -40,15 +40,6 @@ export class MemberDto {
       @IsOptional()
       avatar?: string;
 
-      @IsDateString()
-      created_at: Date;
-
-      @IsDateString()
-      updated_at: Date;
-
-      @IsDateString()
-      deleted_at: Date;
-
     public static async encryptPassword(password: string): Promise<string> {
         try {
           const saltOrRounds = 10;

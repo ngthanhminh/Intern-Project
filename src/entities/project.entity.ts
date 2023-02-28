@@ -17,7 +17,7 @@ import { Ticket } from './ticket.entity';
 })
 export class Project {
   @PrimaryGeneratedColumn()
-  id ?: number;
+  id?: number;
 
   @IsNotEmpty()
   @Column({
@@ -60,17 +60,17 @@ export class Project {
   @CreateDateColumn({
     name: 'created_at',
   })
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn({
     name: 'updated_at',
   })
-  updatedAt: Date;
+  updated_at: Date;
 
   @DeleteDateColumn({
     name: 'deleted_at',
   })
-  deletedAt: Date;
+  deleted_at: Date;
 
   @OneToMany(type => Ticket, (ticket) => ticket.project)
   tickets: Ticket[];

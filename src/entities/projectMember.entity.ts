@@ -21,7 +21,7 @@ export class ProjectMember {
     name: 'id',
     type: 'int',
   })
-  id: number;
+  id?: number;
 
   @Column({
     name: 'member_id',
@@ -38,7 +38,7 @@ export class ProjectMember {
   @CreateDateColumn({
     name: 'created_at',
   })
-  createdAt: Date;
+  created_at: Date;
 
   @ManyToOne(type => Member)
   @JoinColumn({

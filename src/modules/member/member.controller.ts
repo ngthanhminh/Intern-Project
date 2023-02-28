@@ -53,7 +53,7 @@ export class MemberController {
      assignTickets(
           @Param('memberId', ParseIntPipe) memberId: number,
           @Body('ticketIds', ParseArrayPipe) ticketIds: number[],
-     ): Promise<ProjectMember> {
+     ): Promise<ProjectMember[]> {
           return this.memberService.assignTicketForMember(memberId, ticketIds);
      }
 }
