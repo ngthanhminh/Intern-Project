@@ -17,7 +17,7 @@ export class MemberDto {
       @IsNumberString()
       @IsOptional()
       @Exclude()
-      id ?: number; 
+      id?: number; 
 
       @IsString()
       @IsNotEmpty()
@@ -38,24 +38,39 @@ export class MemberDto {
       password: string;
 
       @IsOptional()
-      avatar ?: string;
+      avatar?: string;
 
       @IsDateString()
-      @IsOptional()
-      createdAt: Date;
-      updatedAt: Date;
-      deletedAt ?: Date;
+      created_at: Date;
+
+      @IsDateString()
+      updated_at: Date;
+
+      @IsDateString()
+      deleted_at: Date;
 
     public static async encryptPassword(password: string): Promise<string> {
         try {
           const saltOrRounds = 10;
           return await bcrypt.hash(password, saltOrRounds);
         }
-        catch(error){
+        catch(error) {
           if(error) {
             console.log(error);
             throw new HttpException("Can't encrypt password", HttpStatus.BAD_REQUEST);
           }
         }
+    }
+
+    public static async comparePassword(password: string, hash: string){
+      try {
+        return await bcrypt.compare(password, hash);
+      }
+      catch(error) {
+        if(error) {
+          console.log(error);
+          throw new HttpException("Can't compare password", HttpStatus.BAD_REQUEST);
+        }
+      }
     }
 }

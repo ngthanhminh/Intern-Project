@@ -64,11 +64,10 @@ export class member1677226326059 implements MigrationInterface {
               }),
               true,
           )
-        
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('projects');
+        await queryRunner.clearTable('projects');
+        await queryRunner.dropTable('projects', true);
     }
-
 }

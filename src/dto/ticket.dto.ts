@@ -38,24 +38,20 @@ export class TicketDto {
   deadline: Date;  
 
   @IsDateString()
-  @IsOptional()
-  createdAt: Date;
+  created_at: Date;
 
   @IsDateString()
-  @IsOptional()
-  updatedAt: Date;
+  updated_at: Date;
 
   @IsDateString()
-  @IsOptional()
-  deletedAt: Date;
+  deleted_at: Date;
+
+  @IsNumberString()
+  @IsNotEmpty()
+  project_id: number;
 
   @IsNumberString()
   @IsNotEmpty()
   @IsOptional()
-  // @Exclude()
-  project_id: number;
-
-  @IsNumberString()
-  @IsOptional()
-  assign: number;
+  project_member_id: number;
 }

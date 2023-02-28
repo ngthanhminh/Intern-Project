@@ -1,3 +1,4 @@
+import { ProjectMember } from 'src/entities/projectMember.entity';
 import { Exclude } from 'class-transformer';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import {
@@ -71,7 +72,7 @@ export class Member {
   })
   deletedAt ?: Date;
 
-  @OneToMany(type => Ticket, (ticket) => ticket.project_member_id)
-  project_member_id: Ticket[];
+  @OneToMany(type => ProjectMember, (pm) => pm.member)
+  tickets: ProjectMember[];
 
 }

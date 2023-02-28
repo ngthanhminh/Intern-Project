@@ -1,5 +1,5 @@
 import { ProjectDto } from 'src/dto/project.dto';
-import { ProjectType } from '../../dto/projectType.enum';
+import { ProjectType } from '../../enum/projectType.enum';
 import { 
      Controller,
      Get,
@@ -15,6 +15,7 @@ import {
 import { Project } from 'src/entities/project.entity';
 import { ProjectService } from './project.service';
 import { ParseEnumPipe, ParseIntPipe, ValidationPipe } from '@nestjs/common/pipes';
+import { EMPTY } from 'rxjs';
 
 @UsePipes(ValidationPipe)
 @Controller('project')
@@ -23,12 +24,14 @@ export class ProjectController {
 
      @Get()
      async getProject(
+          @Query('page') page ?: string,
+          @Query('limit') limit ?: string,
           @Query('name') name ?: string,
           @Query('type') type ?: string,
           @Query('startDate') startDate ?: string,
           @Query('endDate') endDate ?: string,
      ): Promise<Project[]> {
-          return await this.projectService.getProject(name, type, startDate, endDate);
+          return await this.projectService.getProject(page, limit, name, type, startDate, endDate);
      }
 
      @Post()
@@ -41,7 +44,7 @@ export class ProjectController {
      @Patch(':id')
      async updateProject(
           @Param('id', ParseIntPipe) id: number,
-          @Body() project: ProjectDto,
+          @Body() project: Partial<ProjectDto>,
      ): Promise<Project> {
           return await this.projectService.updateProject(id, project);
      }

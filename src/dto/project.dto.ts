@@ -7,7 +7,7 @@ import {
      IsOptional, 
      IsString 
 } from 'class-validator';
-import { ProjectType } from './projectType.enum';
+import { ProjectType } from '../enum/projectType.enum';
 import { Exclude, } from 'class-transformer';
 import { TicketDto } from './ticket.dto';
 import { Project } from 'src/entities/project.entity';
@@ -15,7 +15,7 @@ import { Project } from 'src/entities/project.entity';
 export class ProjectDto {
   @IsOptional()
   @Exclude()
-  id ?: number;
+  id?: number;
 
   @IsString()
   @IsNotEmpty()
@@ -28,7 +28,7 @@ export class ProjectDto {
 
   @IsDateString()
   @IsOptional()
-  end_date ?: Date;
+  end_date?: Date;
 
   @IsNotEmpty()
   @IsOptional()
@@ -40,15 +40,12 @@ export class ProjectDto {
   expected_profit: bigint;
 
   @IsDateString()
-  @IsOptional()
-  createdAt: Date;
+  created_at: Date;
 
   @IsDateString()
-  @IsOptional()
-  updatedAt: Date;
+  updated_at: Date;
 
   @IsDateString()
-  @IsOptional()
-  deletedAt: Date;
+  deleted_at: Date;
 
 }

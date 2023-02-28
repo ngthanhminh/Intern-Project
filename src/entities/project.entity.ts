@@ -1,5 +1,5 @@
 import { isNotEmpty, IsNotEmpty, IsOptional } from 'class-validator';
-import { ProjectType } from '../dto/projectType.enum';
+import { ProjectType } from '../enum/projectType.enum';
 import {
   Entity,
   PrimaryGeneratedColumn,

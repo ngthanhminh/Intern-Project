@@ -3,6 +3,7 @@ import {
     QueryRunner,
     Table,
     TableForeignKey,
+    TableIndex,
 } from "typeorm";
 
 export class member1677226446116 implements MigrationInterface {
@@ -38,6 +39,16 @@ export class member1677226446116 implements MigrationInterface {
               }),
               true,
             )
+
+            
+        await queryRunner.createIndex(
+            "projects_members",
+            new TableIndex({
+                name: "IDX_PROJECT_MEMBER",
+                columnNames: ["member_id", "project_id"],
+                isUnique: true,
+            }),
+        )
     
             await queryRunner.createForeignKey(
               "projects_members",
@@ -62,6 +73,7 @@ export class member1677226446116 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.clearTable('projects_members');
+        await queryRunner.dropTable('projects_members', true, true, true);
     }
-
 }

@@ -1,6 +1,7 @@
 import { Transform } from 'class-transformer';
 import { IsDateString, IsNotEmpty, IsNumber, IsNumberString, IsOptional } from 'class-validator';
 import { type } from 'os';
+import { TicketStatus } from '../enum/ticketStatus.enum';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -11,7 +12,7 @@ import {
 } from 'typeorm';
 import { Member } from './member.entity';
 import { Project } from './project.entity';
-import { Project_Member } from './project_member.entity';
+import { ProjectMember } from './projectMember.entity';
 
 @Entity({
   name: 'tickets',
@@ -55,21 +56,29 @@ export class Ticket {
   @CreateDateColumn({
     name: 'created_at',
   })
-  createdAt: Date;
+  created_at: Date;
 
   @IsDateString()
   @IsOptional()
   @CreateDateColumn({
     name: 'updated_at',
   })
-  updatedAt: Date;
+  updated_at: Date;
 
   @IsDateString()
   @IsOptional()
   @CreateDateColumn({
     name: 'deleted_at',
   })
-  deletedAt: Date;
+  deleted_at: Date;
+
+  @Column({
+    type: 'enum',
+    enum: TicketStatus,
+    name: 'status',
+    default: 'TODO',
+  })
+  status: string;
 
   @IsNotEmpty()
   @IsNumberString()
@@ -92,10 +101,10 @@ export class Ticket {
   })
   project: Project;
 
-  @ManyToOne(type => Project_Member, (pm) => pm.ticket)
+  @ManyToOne(type => ProjectMember, (pm) => pm.tickets)
   @JoinColumn({
     name: 'project_member_id',
   })
-  project_member: Project_Member;
+  project_member: ProjectMember;
 
 }

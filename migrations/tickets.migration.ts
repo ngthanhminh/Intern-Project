@@ -86,10 +86,10 @@ export class member1677226510771 implements MigrationInterface {
                 onDelete: "CASCADE",
             }),
           )
-  
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.clearTable('tickets');
+        await queryRunner.dropTable('tickets', true, true);
     }
-
 }

@@ -16,7 +16,7 @@ import { Ticket } from './ticket.entity';
 @Entity({
   name: 'projects_members',
 })
-export class Project_Member {
+export class ProjectMember {
   @PrimaryGeneratedColumn({
     name: 'id',
     type: 'int',
@@ -55,6 +55,6 @@ export class Project_Member {
   project: Project;
 
   @OneToMany(type => Ticket, (ticket) => ticket.project_member)
-  ticket: Ticket[];
+  tickets: Ticket[];
 
 }

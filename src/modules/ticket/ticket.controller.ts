@@ -1,5 +1,4 @@
-import { ParseIntPipe } from '@nestjs/common/pipes';
-import { CreateUserTable1644433555076 } from './../../../migrations/1644433555076-CreateUserTable';
+import { ParseArrayPipe, ParseIntPipe, ValidationPipe } from '@nestjs/common/pipes';
 import { Ticket } from 'src/entities/ticket.entity';
 import { TicketDto } from './../../dto/ticket.dto';
 import { 
@@ -12,9 +11,11 @@ import {
      Query,
      Body,
      Patch,
+     UsePipes,
 } from '@nestjs/common';
 import { TicketService } from './ticket.service';
 
+@UsePipes(ValidationPipe)
 @Controller('ticket')
 export class TicketController {
      constructor(private readonly ticketService: TicketService){}
@@ -37,15 +38,16 @@ export class TicketController {
      @Post() 
      createTicket(
           @Body() ticket: Ticket,
-     ): Promise<Ticket> {
+     ): Promise<Ticket | Ticket[]> {
           return this.ticketService.createTicket(ticket);
      }
 
      @Patch(':id') 
      updateTicket(
           @Param('id', ParseIntPipe) id: number,
-          @Body() ticket: TicketDto,
+          @Body() ticket: Partial<TicketDto>,
      ): Promise<Ticket> {
            return this.ticketService.updateTicket(id, ticket);
      }
+
 }

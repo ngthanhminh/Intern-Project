@@ -1,3 +1,4 @@
+import { ProjectMember } from './../../entities/projectMember.entity';
 import { MemberDto } from './../../dto/member.dto';
 import { 
      Controller,
@@ -14,6 +15,7 @@ import {
      UsePipes,
      ParseIntPipe,
      Patch,
+     ParseArrayPipe,
 } from '@nestjs/common';
 import { Member } from 'src/entities/member.entity';
 import { MemberService } from './member.service';
@@ -40,9 +42,18 @@ export class MemberController {
 
      @Patch(':id') 
      async update(
-          @Body() member: MemberDto,
+          @Body() member: Partial<MemberDto>,
           @Param('id', ParseIntPipe) id : number
      ): Promise<Partial<MemberDto>> {
           return this.memberService.updateMember(id, member);
+     }
+
+     
+     @Patch(':memberId/ticket/')
+     assignTickets(
+          @Param('memberId', ParseIntPipe) memberId: number,
+          @Body('ticketIds', ParseArrayPipe) ticketIds: number[],
+     ): Promise<ProjectMember> {
+          return this.memberService.assignTicketForMember(memberId, ticketIds);
      }
 }
