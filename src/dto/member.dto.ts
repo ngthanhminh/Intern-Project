@@ -1,14 +1,10 @@
-import { Member } from 'src/entities/member.entity';
 import { Exclude, } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
 import { 
   IsNotEmpty, 
   IsString, 
-  MaxLength, 
-  MinLength, 
   Matches,
   IsOptional,
-  IsDateString,
   IsNumberString,
 } from 'class-validator';
 import { HttpException, HttpStatus } from '@nestjs/common';

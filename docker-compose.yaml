@@ -19,4 +19,4 @@ services:
       - MYSQL_USER=ml-intern
       - MYSQL_PASSWORD=password
     ports:
-      - 3306:3306
+      - 3366:3306

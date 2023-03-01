@@ -1,4 +1,4 @@
-import { ProjectMember } from 'src/entities/projectMember.entity';
+import { ProjectMember } from './projectMember.entity';
 import { Exclude } from 'class-transformer';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import {

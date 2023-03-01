@@ -9,8 +9,6 @@ import {
 } from 'class-validator';
 import { ProjectType } from '../enum/projectType.enum';
 import { Exclude, } from 'class-transformer';
-import { TicketDto } from './ticket.dto';
-import { Project } from 'src/entities/project.entity';
 
 export class ProjectDto {
   @IsOptional()

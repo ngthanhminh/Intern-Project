@@ -1,20 +1,23 @@
+import { TicketRepository } from './../../repositories/ticket.repository';
+import { ProjectMemberRepository } from './../../repositories/projectMember.repository';
 import { TicketService } from './../ticket/ticket.service';
+import { TicketModule } from './../ticket/ticket.module';
+import { MemberRepository } from './../../repositories/member.repository';
 import { Module } from '@nestjs/common';
 import { MemberService } from './member.service';
 import { MemberController } from './member.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Member } from 'src/entities/member.entity';
-import { TicketModule } from '../ticket/ticket.module';
-import { ProjectMember } from 'src/entities/projectMember.entity';
-import { Ticket } from 'src/entities/ticket.entity';
+import { ProjectMemberModule } from '../projectMember/projectMember.module';
+import { ProjectMemberService } from '../projectMember/projectMember.service';
 
 @Module({
   imports: [
-      TypeOrmModule.forFeature([Member]),
-      TypeOrmModule.forFeature([ProjectMember]),
-      TypeOrmModule.forFeature([Ticket]),
+      TypeOrmModule.forFeature([MemberRepository]),
+      ProjectMemberModule,
+      TicketModule,
   ],
-  providers: [MemberService,],
-  controllers: [MemberController]
+  providers: [MemberService],
+  controllers: [MemberController],
+  exports: [MemberService,]
 })
 export class MemberModule {}

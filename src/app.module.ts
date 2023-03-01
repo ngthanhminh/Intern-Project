@@ -10,7 +10,7 @@ import { Ticket } from './entities/ticket.entity';
 import { MemberModule } from './modules/member/member.module';
 import { ProjectModule } from './modules/project/project.module';
 import { TicketModule } from './modules/ticket/ticket.module';
-import { UserModule } from './modules/users/user.module';
+import { ProjectMemberModule } from './modules/projectMember/projectMember.module';
 
 @Module({
   imports: [
@@ -24,12 +24,12 @@ import { UserModule } from './modules/users/user.module';
       database: process.env.DB_NAME,
       entities: [Member, Ticket, Project, ProjectMember],
     }),
-    UserModule,
     MemberModule,
     ProjectModule, 
-    TicketModule,
+    TicketModule, 
+    ProjectMemberModule,
   ],
-  controllers: [AppController, ],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}

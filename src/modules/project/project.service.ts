@@ -1,24 +1,20 @@
+import { ProjectRepository } from './../../repositories/project.repository';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProjectDto } from 'src/dto/project.dto';
 import { Project } from 'src/entities/project.entity';
 import { Ticket } from 'src/entities/ticket.entity';
-import { Repository, Brackets} from 'typeorm';
-
 
 @Injectable()
 export class ProjectService {
-     constructor(
-          @InjectRepository(Project)
-          private projectsRepository: Repository<Project>,
-     ) {} 
+     constructor(private readonly projectRepository: ProjectRepository) {} 
 
      // get project
      async getProject(page ?: string, limit ?: string, name ?: string, type ?: string, startDate ?: string, endDate ?: string): Promise<Project[]> {          
           try {
                let proj: Project[] = [];
                if (name !== undefined || type !== undefined || startDate !== undefined || endDate !== undefined) {
-                    proj = await this.projectsRepository.find({
+                    proj = await this.projectRepository.find({
                          relations: ['tickets'],
                          where: [
                               {name: name}, 
@@ -31,13 +27,13 @@ export class ProjectService {
                     if(Number.isNaN(Number(page)) || Number.isNaN(Number(limit))) {
                          throw new HttpException('Page & limit is not NaN', HttpStatus.BAD_REQUEST)
                     }
-                    proj = await this.projectsRepository.find({
+                    proj = await this.projectRepository.find({
                          relations: ['tickets'],
                          skip: (Number(page)-1) * Number(limit),
                          take: Number(limit),
                     });
                } else {
-                    proj = await this.projectsRepository.find({
+                    proj = await this.projectRepository.find({
                          relations: ['tickets'],
                     });
                }
@@ -63,7 +59,7 @@ export class ProjectService {
      // create project 
      async createProject(project: Project): Promise<Project>{
           try {
-               return await this.projectsRepository.save(project);
+               return await this.projectRepository.save(project);
           }
           catch(error){
                console.log(error);
@@ -74,8 +70,8 @@ export class ProjectService {
      // update project 
      async updateProject(id: number, project: Partial<ProjectDto>): Promise<Project>{
           try {
-               await this.projectsRepository.update(id, project);
-               return await this.projectsRepository.findOne({id: id});
+               await this.projectRepository.update(id, project);
+               return await this.projectRepository.findOne({id: id});
           }
           catch(error) {
                console.log(error);
