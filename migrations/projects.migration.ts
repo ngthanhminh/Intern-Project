@@ -36,7 +36,7 @@ export class member1677226326059 implements MigrationInterface {
                     },
                     {
                         name: "project_type",
-                        type: "enum('LABOUR', 'FIX_PRICE', 'MAINTAIN')",
+                        type: "varchar",
                     },
                     {
                         name: "expected_profit",

@@ -1,9 +1,10 @@
 import { ProjectRepository } from './../../repositories/project.repository';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ProjectDto } from 'src/dto/project.dto';
 import { Project } from 'src/entities/project.entity';
 import { Ticket } from 'src/entities/ticket.entity';
+import { UpdateProjectDto } from '../../dto/updateProject.dto';
+import { CreateProjectDto } from 'src/dto/createProject.dto';
 
 @Injectable()
 export class ProjectService {
@@ -12,33 +13,39 @@ export class ProjectService {
      // get project
      async getProject(page ?: string, limit ?: string, name ?: string, type ?: string, startDate ?: string, endDate ?: string): Promise<Project[]> {          
           try {
-               let proj: Project[] = [];
-               if (name !== undefined || type !== undefined || startDate !== undefined || endDate !== undefined) {
-                    proj = await this.projectRepository.find({
-                         relations: ['tickets'],
-                         where: [
-                              {name: name}, 
-                              {project_type: type},
-                              {start_date: new Date(startDate)},
-                              {end_date: new Date(endDate)},
-                         ], 
-                    })
-               } else if(page !== undefined && limit !== undefined) {
+               const keySearch = {};
+               let projects = [];
+               if (name !== undefined) {
+                    keySearch['name'] = name;
+               } 
+               if(type !== undefined) {
+                    keySearch['type'] = type;
+               }
+               if(startDate !== undefined) {
+                    keySearch['startDate'] = startDate;
+               }
+               if(endDate !== undefined) {
+                    keySearch['endDate'] = endDate;
+               }
+
+               if(page !== undefined && limit !== undefined) {
                     if(Number.isNaN(Number(page)) || Number.isNaN(Number(limit))) {
-                         throw new HttpException('Page & limit is not NaN', HttpStatus.BAD_REQUEST)
+                         throw new HttpException('Page & limit is not number', HttpStatus.BAD_REQUEST)
                     }
-                    proj = await this.projectRepository.find({
+                    projects = await this.projectRepository.find({
                          relations: ['tickets'],
+                         where: keySearch,
                          skip: (Number(page)-1) * Number(limit),
                          take: Number(limit),
                     });
                } else {
-                    proj = await this.projectRepository.find({
+                    projects = await this.projectRepository.find({
                          relations: ['tickets'],
+                         where: keySearch,
                     });
                }
 
-               proj.forEach((val, ind) => {
+               projects.forEach((val, ind) => {
                     let ticketTodo: Ticket[] = [];
                     for(let ticket of val.tickets){
                          if(ticket.status === 'TODO')
@@ -47,7 +54,7 @@ export class ProjectService {
                     val.tickets = ticketTodo;
                })
 
-               return proj;
+               return projects;
           }
           catch(error) {
                console.log(error);
@@ -57,7 +64,7 @@ export class ProjectService {
           
 
      // create project 
-     async createProject(project: Project): Promise<Project>{
+     async createProject(project: CreateProjectDto): Promise<Project>{
           try {
                return await this.projectRepository.save(project);
           }
@@ -68,7 +75,7 @@ export class ProjectService {
      }
 
      // update project 
-     async updateProject(id: number, project: Partial<ProjectDto>): Promise<Project>{
+     async updateProject(id: number, project: UpdateProjectDto): Promise<Project>{
           try {
                await this.projectRepository.update(id, project);
                return await this.projectRepository.findOne({id: id});

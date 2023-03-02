@@ -1,6 +1,5 @@
 import { ParseArrayPipe, ParseIntPipe, ValidationPipe } from '@nestjs/common/pipes';
 import { Ticket } from 'src/entities/ticket.entity';
-import { TicketDto } from './../../dto/ticket.dto';
 import { 
      Controller,
      Get,
@@ -14,6 +13,8 @@ import {
      UsePipes,
 } from '@nestjs/common';
 import { TicketService } from './ticket.service';
+import { UpdateTicketDto } from 'src/dto/updateTicket.dto';
+import { CreateTicketDto } from 'src/dto/createTicket.dto';
 
 @UsePipes(ValidationPipe)
 @Controller('ticket')
@@ -22,10 +23,10 @@ export class TicketController {
 
      @Get('/project/:id')
      getTicketsInProject(
-          @Param('id', ParseIntPipe) project_id: number,
+          @Param('id', ParseIntPipe) projectId: number,
           @Query('deadline') deadline ?: string,
      ): Promise<Partial<Ticket>[]> {
-          return this.ticketService.getTicketsInProject(project_id, deadline);
+          return this.ticketService.getTicketsInProject(projectId, deadline);
      }
 
      @Get('/member/:id')
@@ -37,15 +38,15 @@ export class TicketController {
 
      @Post() 
      createTicket(
-          @Body() ticket: Ticket,
-     ): Promise<Ticket | Ticket[]> {
+          @Body() ticket: CreateTicketDto,
+     ): Promise<Ticket> {
           return this.ticketService.createTicket(ticket);
      }
 
      @Patch(':id') 
      updateTicket(
           @Param('id', ParseIntPipe) id: number,
-          @Body() ticket: Partial<TicketDto>,
+          @Body() ticket: UpdateTicketDto,
      ): Promise<Ticket> {
            return this.ticketService.updateTicket(id, ticket);
      }

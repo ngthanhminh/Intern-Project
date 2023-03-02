@@ -10,14 +10,13 @@ import {
 import { ProjectType } from '../enum/projectType.enum';
 import { Exclude, } from 'class-transformer';
 
-export class ProjectDto {
+export class CreateProjectDto {
   @IsOptional()
   @Exclude()
   id?: number;
 
   @IsString()
   @IsNotEmpty()
-  @IsOptional()
   name: string;
 
   @IsDateString()
@@ -29,7 +28,6 @@ export class ProjectDto {
   end_date?: Date;
 
   @IsNotEmpty()
-  @IsOptional()
   @IsEnum(ProjectType)
   project_type: ProjectType;
 

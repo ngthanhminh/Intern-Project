@@ -1,5 +1,4 @@
 import { Exclude, } from 'class-transformer';
-import * as bcrypt from 'bcrypt';
 import { 
   IsNotEmpty, 
   IsString, 
@@ -8,38 +7,23 @@ import {
   IsNumberString,
 } from 'class-validator';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { CreateMemberDto } from './createMember.dto';
+import { createHmac } from 'crypto';
 
-export class MemberDto {
-      @IsNumberString()
+export class UpdateMemberDto extends CreateMemberDto {
       @IsOptional()
-      @Exclude()
-      id?: number; 
-
-      @IsString()
-      @IsNotEmpty()
-      @IsOptional()
-      @Matches(/^[a-zA-Z0-9_\s]{3,30}$/)
       name: string;
 
-      @IsString()
       @Exclude()
-      @IsNotEmpty()
-      @IsOptional()
-      @Matches(/^[a-z0-9_-]{3,30}$/)
       username: string;
 
-      @IsNotEmpty()
       @IsOptional()
-      @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/g)
       password: string;
-
-      @IsOptional()
-      avatar?: string;
 
     public static async encryptPassword(password: string): Promise<string> {
         try {
-          const saltOrRounds = 10;
-          return await bcrypt.hash(password, saltOrRounds);
+          const secret = 'mysecret';
+          return createHmac('md5', secret).update('mystring').digest('hex');
         }
         catch(error) {
           if(error) {
@@ -49,9 +33,11 @@ export class MemberDto {
         }
     }
 
-    public static async comparePassword(password: string, hash: string){
+    public static async comparePassword(password: string, hash: string) {
       try {
-        return await bcrypt.compare(password, hash);
+        // return crypto.verify(hash, password, 'mysecret');
+        return true;
+
       }
       catch(error) {
         if(error) {

@@ -11,7 +11,7 @@ export class addColumnTicket1677469921988 implements MigrationInterface {
             "tickets",
             new TableColumn({
                 name: "status",
-                type: "enum('TODO', 'INPROGRESS', 'DONE')",
+                type: "varchar",
             }),
         );
     }

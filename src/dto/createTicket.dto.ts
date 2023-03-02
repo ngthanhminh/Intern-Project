@@ -1,9 +1,9 @@
-import { ProjectDto } from './project.dto';
-import { MemberDto } from './member.dto';
+import { TicketStatus } from './../enum/ticketStatus.enum';
 import { Exclude } from 'class-transformer';
 import { 
      IsDate, 
      IsDateString, 
+     IsEnum, 
      IsNotEmpty, 
      IsNumber, 
      IsNumberString, 
@@ -12,25 +12,22 @@ import {
      MaxLength, 
 } from 'class-validator';
 
-export class TicketDto {
+export class CreateTicketDto {
   @IsOptional()
   @Exclude()
   id ?: number;
 
   @IsNotEmpty() 
-  @IsOptional()
   code: number;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(120)
-  @IsOptional()
   title: string;
 
   @IsString()
   @IsNotEmpty() 
   @MaxLength(5000)
-  @IsOptional()
   content: string;
 
   @IsDateString()
@@ -42,7 +39,10 @@ export class TicketDto {
   project_id: number;
 
   @IsNumberString()
-  @IsNotEmpty()
   @IsOptional()
   project_member_id: number;
+
+  @IsNotEmpty()
+  @IsEnum(TicketStatus)
+  status: string;
 }

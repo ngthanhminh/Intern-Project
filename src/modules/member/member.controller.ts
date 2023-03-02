@@ -1,5 +1,4 @@
 import { ProjectMember } from './../../entities/projectMember.entity';
-import { MemberDto } from './../../dto/member.dto';
 import { 
      Controller,
      Get,
@@ -19,6 +18,8 @@ import {
 } from '@nestjs/common';
 import { Member } from 'src/entities/member.entity';
 import { MemberService } from './member.service';
+import { UpdateMemberDto } from 'src/dto/updateMember.dto';
+import { CreateMemberDto } from 'src/dto/createMember.dto';
 
 @UsePipes(ValidationPipe)
 @Controller('member')
@@ -29,22 +30,22 @@ export class MemberController {
      async getMembers(
           @Query('name') name ?: string,
           @Query('username') username ?: string,
-     ): Promise<Partial<MemberDto>[]> {
+     ): Promise<Partial<Member>[]> {
           return this.memberService.getListMembers(username, name);
      }
 
      @Post()
      async create(
-          @Body() member: Member,
+          @Body() member: CreateMemberDto,
      ): Promise<Partial<Member>> {
           return this.memberService.createMember(member);
      }
 
      @Patch(':id') 
      async update(
-          @Body() member: Partial<MemberDto>,
+          @Body() member: UpdateMemberDto,
           @Param('id', ParseIntPipe) id : number
-     ): Promise<Partial<MemberDto>> {
+     ): Promise<Partial<UpdateMemberDto>> {
           return this.memberService.updateMember(id, member);
      }
 

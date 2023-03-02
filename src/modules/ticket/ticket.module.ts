@@ -1,4 +1,4 @@
-import { ProjectMemberRepository } from './../../repositories/projectMember.repository';
+import { ProjectMemberModule } from './../projectMember/projectMember.module';
 import { TicketRepository } from './../../repositories/ticket.repository';
 import { Module } from '@nestjs/common';
 import { TicketService } from './ticket.service';
@@ -7,7 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [TypeOrmModule.forFeature([TicketRepository]),
-            TypeOrmModule.forFeature([ProjectMemberRepository])
+            ProjectMemberModule,
   ],
   providers: [TicketService],
   controllers: [TicketController],

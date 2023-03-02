@@ -21,7 +21,6 @@ export class Ticket {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @IsNotEmpty()
   @Column({
     name: 'code',
     type: 'int',
@@ -29,7 +28,6 @@ export class Ticket {
   })
   code: number;
 
-  @IsNotEmpty()
   @Column({
     type: 'nvarchar',
     length: 120,
@@ -37,58 +35,44 @@ export class Ticket {
   })
   title: string;
 
-  @IsNotEmpty()
   @Column({
     type: 'text',
     name: 'content',
   })
   content: string;
 
-  @IsDateString()
-  @IsNotEmpty()
   @CreateDateColumn({
     name: 'deadline',
   })
   deadline: Date;  
 
-  @IsDateString()
-  @IsOptional()
   @CreateDateColumn({
     name: 'created_at',
   })
   created_at: Date;
 
-  @IsDateString()
-  @IsOptional()
   @CreateDateColumn({
     name: 'updated_at',
   })
   updated_at: Date;
 
-  @IsDateString()
-  @IsOptional()
   @CreateDateColumn({
     name: 'deleted_at',
   })
   deleted_at: Date;
 
   @Column({
-    type: 'enum',
-    enum: TicketStatus,
+    type: 'varchar',
     name: 'status',
-    default: 'TODO',
   })
   status: string;
 
-  @IsNotEmpty()
-  @IsNumberString()
   @Column({
     name: 'project_id',
     type: 'int',
   })
   project_id: number;
 
-  @IsOptional()
   @Column({
     name: 'project_member_id',
     type: 'int',

@@ -1,34 +1,26 @@
-import { ProjectMemberRepository } from './../../repositories/projectMember.repository';
 import { TicketRepository } from './../../repositories/ticket.repository';
-import { ProjectMember } from '../../entities/projectMember.entity';
-import { TicketDto } from './../../dto/ticket.dto';
 import { HttpCode, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { Ticket } from 'src/entities/ticket.entity';
+import { UpdateTicketDto } from 'src/dto/updateTicket.dto';
+import { CreateTicketDto } from 'src/dto/createTicket.dto';
+import { ProjectMemberService } from '../projectMember/projectMember.service';
 
 @Injectable()
 export class TicketService {
      constructor(
           private readonly ticketRepository: TicketRepository,
-          private readonly projectMembersRepository: ProjectMemberRepository,
+          private readonly projectMemberService: ProjectMemberService,
      ) {} 
      
 
      // get list tickets in a project 
      async getTicketsInProject(projectId: number, deadline ?: string): Promise<Partial<Ticket>[]> {
-          if(deadline !== undefined) {
+          const keySearch = {project_id: projectId}
+          if(deadline) keySearch['deadline'] = deadline;
                return await this.ticketRepository.find({
                     select: ['id', 'code', 'title', 'deadline', 'project_id', 'project_member_id', 'created_at', 'updated_at', 'deleted_at'],
-                    where: {deadline: new Date(deadline), project_id: projectId}
+                    where: keySearch,
                });
-          } else {
-               return await this.ticketRepository.find({
-                    select: ['id', 'code', 'title', 'deadline', 'project_id', 'project_member_id', 'created_at', 'updated_at', 'deleted_at'],
-                    where: [
-                         {project_id: projectId},
-                    ]
-               });
-          }
-
      }
 
      // get list tickets for a member 
@@ -51,19 +43,15 @@ export class TicketService {
      }
 
      // create ticket
-     async createTicket(ticket: Ticket): Promise<Ticket>{ 
+     async createTicket(ticket: CreateTicketDto | UpdateTicketDto): Promise<Ticket>{ 
           try {
                if(ticket.project_member_id === undefined) {
                     return await this.ticketRepository.save(ticket);
                }
                else {
-                    const project = await this.projectMembersRepository
-                         .createQueryBuilder('ProjectMember')
-                         .where('ProjectMember.id = :id', {id: ticket.project_member_id})
-                         .andWhere('ProjectMember.project_id = :project_id', {project_id: ticket.project_id})
-                         .getOne()
+                    const project = await this.projectMemberService.existProjectMember(ticket.project_member_id, ticket.project_id);
                     if(project)
-                         return this.ticketRepository.save(ticket);
+                         return await this.ticketRepository.save(ticket);
                     throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
                };
           }
@@ -74,24 +62,15 @@ export class TicketService {
      }
 
      // update ticket
-     async updateTicket(id: number, ticket: Partial<TicketDto>): Promise<Ticket>{
+     async updateTicket(id: number, ticket: UpdateTicketDto): Promise<Ticket> {
           try {
-               if(ticket.project_id === undefined && ticket.project_member_id === undefined) {
-                    await this.ticketRepository.update(id, ticket);
-                    return await this.ticketRepository.findOne({id: id});
-               } else {
-                    const project = await this.ticketRepository
-                         .createQueryBuilder('ticket')
-                         .innerJoinAndSelect('ProjectMember', 'ProjectMember', 'ticket.project_member = ProjectMember.id')
-                         .where('ProjectMember.id = :id', {id: ticket.project_member_id})
-                         .where('ProjectMember.project_id = :project_id', {project_id: ticket.project_id})
-                         .getOne()
-                    if(project){
-                         await this.ticketRepository.update(id, ticket);
-                         return await this.ticketRepository.findOne({id: id});
-                    }
-                    throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+               const t = await this.ticketRepository.findOne({id: id});
+               if(!t) throw new HttpException('BadRequest', HttpStatus.BAD_REQUEST);
+
+               if(t.project_member_id === null) {
+                    return await this.ticketRepository.save(ticket);
                }
+               return await this.createTicket(Object.assign(t, ticket));
           }
           catch(error) {
                console.log(error);
