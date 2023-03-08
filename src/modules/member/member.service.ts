@@ -51,7 +51,7 @@ export class MemberService {
      async updateMember(id : number, memberData: UpdateMemberDto): Promise<Partial<Member>> {
           try {
                const member = await this.memberRepository.findOne({id: id});
-               if(member && PasswordFeature.ComparePassword(memberData.password, member.password)) {
+               if(member) {
                     memberData.password = PasswordFeature.HashPassWord(memberData.password);
                     await this.memberRepository.update(id, memberData);
                     const member2 = await this.memberRepository.findOne({id: id});
@@ -68,11 +68,12 @@ export class MemberService {
      
      // assign ticket for a member 
      async assignTicketForMember(memberId: number, ticketIds: number[]): Promise<ProjectMember[]> {
-          if(this.projectMemberService.inProject(memberId)){
+          if(await this.projectMemberService.existProjectMember(memberId)){
                const projectMembers = await this.projectMemberService.getProjectsOfMember(memberId);
                this.ticketService.assignTicketsFor(memberId, projectMembers, ticketIds);
                return await this.projectMemberService.getTicketsOf(memberId);
           }
           throw new HttpException('The member has not joined any projects', HttpStatus.BAD_REQUEST);
      }
+
 }

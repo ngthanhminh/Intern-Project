@@ -2,6 +2,7 @@ import { Exclude } from 'class-transformer';
 import { 
      IsDate, 
      IsDateString, 
+     IsEnum, 
      IsNotEmpty, 
      IsNumber, 
      IsNumberString, 
@@ -9,6 +10,7 @@ import {
      IsString, 
      MaxLength, 
 } from 'class-validator';
+import { TicketStatus } from 'src/enum/ticketStatus.enum';
 import { CreateTicketDto } from './createTicket.dto';
 
 export class UpdateTicketDto extends CreateTicketDto {
@@ -27,5 +29,6 @@ export class UpdateTicketDto extends CreateTicketDto {
   project_id: number; 
 
   @IsOptional()
+  @IsEnum(TicketStatus)
   status: string;
 }

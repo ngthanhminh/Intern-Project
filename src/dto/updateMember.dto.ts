@@ -14,6 +14,7 @@ export class UpdateMemberDto extends CreateMemberDto {
       @IsOptional()
       name: string;
 
+      @IsOptional()
       @Exclude()
       username: string;
 

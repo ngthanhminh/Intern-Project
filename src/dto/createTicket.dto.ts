@@ -17,6 +17,7 @@ export class CreateTicketDto {
   @Exclude()
   id ?: number;
 
+  @IsNumberString()
   @IsNotEmpty() 
   code: number;
 

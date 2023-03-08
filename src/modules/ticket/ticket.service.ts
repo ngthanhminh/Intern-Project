@@ -43,7 +43,7 @@ export class TicketService {
      }
 
      // create ticket
-     async createTicket(ticket: CreateTicketDto | UpdateTicketDto): Promise<Ticket>{ 
+     async createTicket(ticket: CreateTicketDto): Promise<Ticket>{ 
           try {
                if(ticket.project_member_id === undefined) {
                     return await this.ticketRepository.save(ticket);
@@ -62,15 +62,15 @@ export class TicketService {
      }
 
      // update ticket
-     async updateTicket(id: number, ticket: UpdateTicketDto): Promise<Ticket> {
+     async updateTicket(id: number, ticketData: UpdateTicketDto): Promise<Ticket> {
           try {
-               const t = await this.ticketRepository.findOne({id: id});
-               if(!t) throw new HttpException('BadRequest', HttpStatus.BAD_REQUEST);
+               const ticket = await this.ticketRepository.findOne({id: id});
+               if(!ticket) throw new HttpException('BadRequest', HttpStatus.BAD_REQUEST);
 
-               if(t.project_member_id === null) {
-                    return await this.ticketRepository.save(ticket);
+               if(ticket.project_member_id === null && ticketData.project_member_id === undefined) {
+                    return await this.ticketRepository.save(ticketData);
                }
-               return await this.createTicket(Object.assign(t, ticket));
+               return await this.createTicket(Object.assign(ticket, ticketData));
           }
           catch(error) {
                console.log(error);

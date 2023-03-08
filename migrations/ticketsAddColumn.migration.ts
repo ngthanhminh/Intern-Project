@@ -12,6 +12,7 @@ export class addColumnTicket1677469921988 implements MigrationInterface {
             new TableColumn({
                 name: "status",
                 type: "varchar",
+                default: 'TODO',
             }),
         );
     }

@@ -40,17 +40,13 @@ export class ProjectMemberService {
      }
 
      // check member in a project 
-     async inProject(memberId: number) {
-          return await this.projectMemberRepository.findOne({member_id: memberId});
+     async existProjectMember(memberId: number, projectId?: number) {
+          const find = {};
+          if(memberId) find['member_id'] = memberId;
+          if(projectId) find['project_id'] = projectId;
+          const projectMember = await this.projectMemberRepository.find({where: find});
+          if(projectMember.length > 0) 
+               return true;
+          return false;
      }
-
-     // member take part in project 
-     async existProjectMember(projectMemberId: number, projectId: number) {
-          return await this.projectMemberRepository
-               .createQueryBuilder('ProjectMember')
-               .where('ProjectMember.id = :id', {id: projectMemberId})
-               .andWhere('ProjectMember.project_id = :project_id', {project_id: projectId})
-               .getOne()
-     }
-
 }
