@@ -38,12 +38,11 @@ export class Project {
   end_date: Date;
 
   @Column({
-    type: 'enum',
-    enum: ProjectType,
+    type: 'varchar',
     name: 'project_type',
     default: 'LABOUR',
   })
-  project_type: ProjectType;
+  project_type: string;
 
   @Column({
     type: 'bigint',

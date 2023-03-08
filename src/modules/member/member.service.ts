@@ -1,3 +1,4 @@
+import { PasswordFeature } from './../../feature/pasword.feature';
 import { TicketService } from './../ticket/ticket.service';
 import { ProjectMemberService } from '../projectMember/projectMember.service';
 import { MemberRepository } from './../../repositories/member.repository';
@@ -35,7 +36,7 @@ export class MemberService {
      //  create member
      async createMember(memberData: CreateMemberDto): Promise<Partial<Member>> {
           try {
-               memberData.password = await UpdateMemberDto.encryptPassword(memberData.password);
+               memberData.password = PasswordFeature.HashPassWord(memberData.password);
                const newMember = await this.memberRepository.save(memberData);
                newMember.password = undefined;
                return newMember;
@@ -50,8 +51,8 @@ export class MemberService {
      async updateMember(id : number, memberData: UpdateMemberDto): Promise<Partial<Member>> {
           try {
                const member = await this.memberRepository.findOne({id: id});
-               if(member && !await UpdateMemberDto.comparePassword(memberData.password, member.password)) {
-                    memberData.password = await UpdateMemberDto.encryptPassword(memberData.password);
+               if(member && PasswordFeature.ComparePassword(memberData.password, member.password)) {
+                    memberData.password = PasswordFeature.HashPassWord(memberData.password);
                     await this.memberRepository.update(id, memberData);
                     const member2 = await this.memberRepository.findOne({id: id});
                     member2.password = undefined;

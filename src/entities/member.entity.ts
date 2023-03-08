@@ -17,7 +17,7 @@ import { Ticket } from './ticket.entity';
 })
 export class Member {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id: number;
 
   @Column({
     type: 'varchar',

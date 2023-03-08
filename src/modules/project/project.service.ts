@@ -53,7 +53,6 @@ export class ProjectService {
                     }
                     val.tickets = ticketTodo;
                })
-
                return projects;
           }
           catch(error) {

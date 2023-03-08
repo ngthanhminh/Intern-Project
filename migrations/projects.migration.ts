@@ -58,7 +58,6 @@ export class member1677226326059 implements MigrationInterface {
                       type: "timestamp",
                       // default: "now()",
                       isNullable: true,
-        
                     },
                   ],
               }),

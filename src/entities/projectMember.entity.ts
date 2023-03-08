@@ -20,7 +20,7 @@ export class ProjectMember {
     name: 'id',
     type: 'int',
   })
-  id?: number;
+  id: number;
 
   @Column({
     name: 'member_id',
@@ -57,3 +57,4 @@ export class ProjectMember {
   tickets: Ticket[];
 
 }
+
